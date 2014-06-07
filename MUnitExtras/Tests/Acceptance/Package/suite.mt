@@ -1,0 +1,13 @@
+TestSuite[{
+	"TestQ.mt"
+	,
+	"ProtectTestSyntax.mt"
+	,
+	"AssignTestFeatures.mt"
+	,
+	"AddTestDefaultFunction.mt"
+	,
+	"ThrowCatchTestError.mt"
+	,
+	"TestCaseEnvironment.mt"
+}]

@@ -1,0 +1,3 @@
+TestSuite[{
+	"TestOfTests.mt"
+}]
