@@ -21,7 +21,7 @@
 * Tools simplifying creation of custom tests.
 * Tools for creation of reusable test cases (collections of tests).
 * Customizable automatic failure messages.
-* 11 specialized test functions and 4 test case functions.
+* 11 new specialized test functions and 4 test case functions.
 
 
 
