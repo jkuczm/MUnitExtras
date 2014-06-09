@@ -51,6 +51,9 @@ Begin["`Private`"]
 (*Imports*)
 
 
+Needs["MUnitExtras`Package`"] (* `Private`$TestingFunctions *)
+
+
 Needs["ProtectionUtilities`"] (* ProtectContextNonVariables, ProtectSyntax *)
 Needs["OptionsUtilities`"]
 (* SaveOptions, RestoreOptions, `Private`$SavedOptions *)
@@ -223,6 +226,22 @@ EndTestEnvironment[OptionsPattern[]] := (
 				*)
 				Quiet[Remove[allSymbsInContext], {Remove::rmnsm}];
 			];
+			
+			(*
+				Custom testing functions could have been defined in test
+				environment and is now removed. Clear all remnants of such
+				functions.
+			*)
+			MUnitExtras`Package`Private`$TestingFunctions =
+				Delete[
+					MUnitExtras`Package`Private`$TestingFunctions
+					,
+					Position[
+						ToString /@
+							MUnitExtras`Package`Private`$TestingFunctions,
+						_String?(StringMatchQ[#, "Removed[" ~~ __ ~~ "]"] &)
+					]
+				];
 		];
 		
 		$ContextPath = DeleteCases[$ContextPath, lastTestEnvContex];

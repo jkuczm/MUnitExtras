@@ -758,6 +758,57 @@ options of symbol from mock package remain with values set in test env."
 ];
 
 
+(* ::Subsection:: *)
+(*Removed testing functions clearing*)
+
+
+Block[
+	{
+		$Context = original$Context,
+		$ContextPath = original$ContextPath,
+		$Packages = original$Packages
+		,
+		MUnitExtras`TestEnvironment`Private`$TestEnvironments =
+			{contextOptIdRule}
+		,
+		OptionsUtilities`Private`$SavedOptions = {},
+		MUnitExtras`Package`Private`$TestingFunctions
+	}
+	,
+	
+	
+	SetUp[];
+	
+	MUnitExtras`Package`Private`$TestingFunctions =
+		{Test, customTest};
+	
+	Remove[customTest];
+	
+	Test[
+		EndTestEnvironment[]
+		,
+		contextOptIdRule
+		,
+		TestID -> "Removed testing functions clearing: \
+EndTestEnvironment evaluation: \
+Rule with proper context and optionsId returned, \
+no messages generated."
+	];
+	
+	
+	Test[
+		MUnitExtras`Package`Private`$TestingFunctions
+		,
+		{Test}
+		,
+		TestID -> "Removed testing functions clearing: \
+Removed symbol was removed from testing functions list."
+	];
+	
+	TearDown[];
+];
+
+
 (* ::Section:: *)
 (*TearDown*)
 
