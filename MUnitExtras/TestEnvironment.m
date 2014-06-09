@@ -229,7 +229,7 @@ EndTestEnvironment[OptionsPattern[]] := (
 			
 			(*
 				Custom testing functions could have been defined in test
-				environment and is now removed. Clear all remnants of such
+				environment and are now removed. Clear all remnants of such
 				functions.
 			*)
 			MUnitExtras`Package`Private`$TestingFunctions =
