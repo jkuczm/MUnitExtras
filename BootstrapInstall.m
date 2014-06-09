@@ -49,7 +49,7 @@ Module[
 		
 		Print["Installing MUnitExtras:"];
 		Print @ ProjectInstaller`ProjectInstall @ URL[
-			"https://github.com/jkuczm/MUnitExtras/releases/download/v0.1.0/MUnitExtras.zip"
+			"https://github.com/jkuczm/MUnitExtras/releases/download/v0.1.1/MUnitExtras.zip"
 		];
 	];
 ]

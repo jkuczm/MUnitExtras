@@ -61,7 +61,7 @@ don't have it already installed.
 ### Manual installation
 
 1. Download latest released
-   [MUnitExtras.zip](https://github.com/jkuczm/MUnitExtras/releases/download/v0.1.0/MUnitExtras.zip)
+   [MUnitExtras.zip](https://github.com/jkuczm/MUnitExtras/releases/download/v0.1.1/MUnitExtras.zip)
    file.
 
 2. Extract downloaded `MUnitExtras.zip` to any directory which is on
