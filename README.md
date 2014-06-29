@@ -1,8 +1,8 @@
 # MUnit Extras
 
-[![release](http://img.shields.io/github/release/jkuczm/MUnitExtras.svg)](https://github.com/jkuczm/MUnitExtras/releases/latest)
-[![Semantic Versioning](http://img.shields.io/badge/SemVer-2.0.0-brightgreen.svg)](http://semver.org/spec/v2.0.0.html)
-[![license MIT](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/jkuczm/MUnitExtras/blob/master/LICENSE)
+[![latest release](http://img.shields.io/github/release/jkuczm/MUnitExtras.svg)](https://github.com/jkuczm/MUnitExtras/releases/latest)
+[![Semantic Versioning](http://jkuczm.github.io/media/images/SemVer-2.0.0-brightgreen.svg)](http://semver.org/spec/v2.0.0.html)
+[![license MIT](http://jkuczm.github.io/media/images/license-MIT-blue.svg)](https://github.com/jkuczm/MUnitExtras/blob/master/LICENSE)
 
 * [Features](#features)
 * [Requirements](#requirements)
