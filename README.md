@@ -94,7 +94,7 @@ Mathematica `$Path`:
 $Path =
     DeleteDuplicates @ Join[
         FileNameJoin[{"/path/to/eclipse/configuration/org.eclipse.osgi/bundles/497/1/.cp", #}]& /@ {
-            "MathematicaSource", 
+            "MathematicaSource",
             "MathematicaSourceVersioned/Head"
         }
         ,

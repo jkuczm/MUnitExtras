@@ -226,7 +226,7 @@ AssignTestFeatures[
 	testFunc_Symbol,
 	baseTestFunc_Symbol:Test,
 	opts:OptionsPattern[]
-] := 
+] :=
 	AssignTestFeatures[testFunc, {baseTestFunc}, opts]
 
 AssignTestFeatures[

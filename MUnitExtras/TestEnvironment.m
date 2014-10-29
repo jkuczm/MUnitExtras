@@ -139,7 +139,7 @@ functionCall:BeginTestEnvironment[
 			symbToSaveOpt = OptionValue["SaveOptionsForSymbols"];
 		];
 		
-		beginPackageResult = 
+		beginPackageResult =
 			(* BeginPackage does not accept empty list as second argument. *)
 			If[needs === {},
 				BeginPackage[context]

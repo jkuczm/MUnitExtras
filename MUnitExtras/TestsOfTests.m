@@ -263,7 +263,7 @@ TestCaseOfTestResult[
 AssignTestFeatures[TestCaseOfErrorTestResult, TestCaseOfTestResult];
 
 SetOptions[TestCaseOfErrorTestResult,
-	"AllSelectors" -> 
+	"AllSelectors" ->
 		OptionValue[TestCaseOfTestResult, "AllSelectors"] /.
 			(
 				(First[#] -> _) -> (#)& /@ {

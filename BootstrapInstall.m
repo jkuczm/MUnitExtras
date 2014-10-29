@@ -21,11 +21,11 @@ BootstrapInstall[
 		"StringUtilities" -> "0.1.0"
 	}
 	,
-	"AdditionalFailureMessage" -> 
+	"AdditionalFailureMessage" ->
 		Sequence[
-			"You can ", 
+			"You can ",
 			Hyperlink[
-				"install MUnitExtras package manually", 
+				"install MUnitExtras package manually",
 				"https://github.com/jkuczm/MUnitExtras#manual-installation"
 			],
 			"."
