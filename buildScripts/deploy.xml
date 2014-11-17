@@ -8,7 +8,7 @@
 	<import file="${WWBCommonPath}/init.xml"/>
 	
 	
-	<target name="main">
+	<target name="main" depends="runTests">
 		<antcall target="cleanArchive"/>
 		<antcall target="clean"/>
 		<antcall target="appbuild"/>
