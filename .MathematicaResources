@@ -1,10 +1,11 @@
 Resources[
-	Version[1],
+    Version[1],
     Sources[
-        Directory["~"]
+        Directory["~"],
+        Directory["dependencies"]
     ],
-	ExecutionBuildCommand["\"No build command\""],
-	Paclet[
-		FunctionPaclet[False]
-	]
+    ExecutionBuildCommand["\"No build command\""],
+    Paclet[
+        FunctionPaclet[False]
+    ]
 ]
