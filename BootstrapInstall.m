@@ -5,7 +5,7 @@ Get["https://raw.githubusercontent.com/jkuczm/MathematicaBootstrapInstaller/v0.1
 
 BootstrapInstall[
 	"MUnitExtras",
-	"https://github.com/jkuczm/MUnitExtras/releases/download/v0.1.1/MUnitExtras.zip"
+	"https://github.com/jkuczm/MUnitExtras/releases/download/v0.2.0/MUnitExtras.zip"
 	,
 	{
 		#1
