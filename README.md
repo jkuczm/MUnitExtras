@@ -1,11 +1,12 @@
 # MUnit Extras
 
-[![latest release](http://img.shields.io/github/release/jkuczm/MUnitExtras.svg)](https://github.com/jkuczm/MUnitExtras/releases/latest)
+[![latest release](http://img.shields.io/github/release/jkuczm/MUnitExtras.svg)](https://github.com/jkuczm/MUnitExtras/releases)
 [![Semantic Versioning](http://jkuczm.github.io/media/images/SemVer-2.0.0-brightgreen.svg)](http://semver.org/spec/v2.0.0.html)
 [![license MIT](http://jkuczm.github.io/media/images/license-MIT-blue.svg)](https://github.com/jkuczm/MUnitExtras/blob/master/LICENSE)
+[![Mathematica 8.0 9.0 10.0](http://jkuczm.github.io/media/images/Mathematica-8.0_9.0_10.0-brightgreen.svg)](#compatibility)
 
 * [Features](#features)
-* [Requirements](#requirements)
+* [Compatibility](#compatibility)
 * [Installation](#installation)
     * [Automatic installation](#automatic-installation)
     * [Manual installation](#manual-installation)
@@ -27,16 +28,13 @@
 
 
 
-## Requirements
+## Compatibility
 
-* Mathematica version 8+
+* Mathematica versions 8.0, 9.0 or 10.0
 
-* MUnit version 1.3.0
-  
-  This package contains some dirty monkey patches compatible with MUnit
-  version 1.3.0 that is distributed with version 2.0.138 of Wolfram Workbench
-  (which is newest version available at
-  http://workbench.wolfram.com/update as Eclipse plugin).
+* MUnit versions:
+  * 1.3 - version distributed with Wolfram Workbench 2.0,
+  * 1.4 - version distributed with Mathematica 10.0.
 
 
 
@@ -87,18 +85,14 @@ To load MUnitExtras in `*.mt` file run with
 [Workbenchs test runner](http://reference.wolfram.com/workbench/index.jsp?topic=/com.wolfram.eclipse.help/html/tasks/documentationpaclets/index.html)
 add ``Needs["MUnitExtras`"]`` to the file.
 
-To use MUnitExtras outside of Workbenchs test runner, you must find MUnit
-package in your Workbench installation directory and add its location to
-Mathematica `$Path`:
+To use MUnitExtras in Mathematica versions < 10.0  outside of Workbenchs test
+runner, you must find MUnit package in your Workbench installation directory
+and add its location to Mathematica `$Path`:
 ```Mathematica
 $Path =
-    DeleteDuplicates @ Join[
-        FileNameJoin[{"/path/to/eclipse/configuration/org.eclipse.osgi/bundles/497/1/.cp", #}]& /@ {
-            "MathematicaSource",
-            "MathematicaSourceVersioned/Head"
-        }
-        ,
-        $Path
+    DeleteDuplicates @ Prepend[
+        $Path,
+        FileNameJoin["/path/to/eclipse/configuration/org.eclipse.osgi/bundles/497/1/.cp/MathematicaSourceVersioned/Head"]
     ];
 
 Needs["MUnitExtras`"]
@@ -106,6 +100,10 @@ Needs["MUnitExtras`"]
 (change
 `/path/to/eclipse/configuration/org.eclipse.osgi/bundles/497/1/.cp`
 to location of MUnit on your system).
+
+
+To load MUnitExtras in Mathematica version 10.0 evaluate
+``Needs["MUnitExtras`"]``
 
 
 ## Documentation
