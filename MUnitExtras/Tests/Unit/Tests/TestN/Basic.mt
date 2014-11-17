@@ -39,7 +39,7 @@ TestCaseOfTest[
 		,
 		TestID -> "tested TestID: Success"
 		,
-		EquivalenceFunction -> Equal,
+		SameTest -> Equal,
 		InputWrapper -> N,
 		ExpectedWrapper -> N
 	}
@@ -68,7 +68,7 @@ TestCaseOfTest[
 		,
 		TestID -> "tested TestID: Failure"
 		,
-		EquivalenceFunction -> Equal,
+		SameTest -> Equal,
 		InputWrapper -> N,
 		ExpectedWrapper -> N
 	}
@@ -99,7 +99,7 @@ TestCaseOfTest[
 		,
 		TestID -> "tested TestID: Success with messages"
 		,
-		EquivalenceFunction -> Equal,
+		SameTest -> Equal,
 		InputWrapper -> N,
 		ExpectedWrapper -> N
 	}
@@ -130,7 +130,7 @@ TestCaseOfTest[
 		,
 		TestID -> "tested TestID: MessagesFailure"
 		,
-		EquivalenceFunction -> Equal,
+		SameTest -> Equal,
 		InputWrapper -> N,
 		ExpectedWrapper -> N
 	}

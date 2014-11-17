@@ -53,14 +53,18 @@ mockTest options same as Test options"
 	Module[
 		{tr}
 		,
-		TestStringMatch[
+		Test[
 			Block[
-				{MUnit`Package`logTestResult}
+				{
+					MUnit`Package`logTestResult,
+					MUnit`Package`$TestIndex = 0,
+					MUnit`Package`$dynamicTestIndex = 0
+				}
 				,
-				SymbolName[tr = mockTest["defaultExpected"]]
+				TestResultQ[tr = mockTest["defaultExpected"]]
 			]
 			,
-			"TestResultObject*"
+			True
 			,
 			TestID -> "2 args: \
 mockTest evaluation (Success)"
@@ -77,14 +81,18 @@ TestResultObject (Success): FailureMode"
 	Module[
 		{tr}
 		,
-		TestStringMatch[
+		Test[
 			Block[
-				{MUnit`Package`logTestResult}
+				{
+					MUnit`Package`logTestResult,
+					MUnit`Package`$TestIndex = 0,
+					MUnit`Package`$dynamicTestIndex = 0
+				}
 				,
-				SymbolName[tr = mockTest["notExpected"]]
+				TestResultQ[tr = mockTest["notExpected"]]
 			]
 			,
-			"TestResultObject*"
+			True
 			,
 			TestID -> "2 args: \
 mockTest evaluation (Failure)"
@@ -101,14 +109,18 @@ TestResultObject (Failure): FailureMode"
 	Module[
 		{tr}
 		,
-		TestStringMatch[
+		Test[
 			Block[
-				{MUnit`Package`logTestResult}
+				{
+					MUnit`Package`logTestResult,
+					MUnit`Package`$TestIndex = 0,
+					MUnit`Package`$dynamicTestIndex = 0
+				}
 				,
-				SymbolName[tr = mockTest[1, 2, 3]]
+				TestResultQ[tr = mockTest[1, 2, 3]]
 			]
 			,
-			"TestResultObject*"
+			True
 			,
 			TestID -> "2 args: \
 mockTest evaluation (incorrect args)"
@@ -181,14 +193,18 @@ mockTest evaluation (correct args)"
 	Module[
 		{tr}
 		,
-		TestStringMatch[
+		Test[
 			Block[
-				{MUnit`Package`logTestResult}
+				{
+					MUnit`Package`logTestResult,
+					MUnit`Package`$TestIndex = 0,
+					MUnit`Package`$dynamicTestIndex = 0
+				}
 				,
-				SymbolName[tr = mockTest[1, 2, 3]]
+				TestResultQ[tr = mockTest[1, 2, 3]]
 			]
 			,
-			"TestResultObject*"
+			True
 			,
 			TestID -> "3 args: \
 mockTest evaluation (incorrect args)"

@@ -37,14 +37,20 @@ TestMatch[
 	{
 		HoldAllSubpatterns[
 			HoldPattern[mockTest[args___]] :>
-				testError[
-					ToString @ StringForm[
-						General::incorrectTestArgs,
-						mockTest,
-						MeetLogger`Private`makeString[HoldForm[{args}]]
-					]
-					,	
-					Sequence @@ Cases[HoldComplete[args], OptionsPattern[]]
+				With[
+					{
+						msg =
+							ToString @ StringForm[
+								General::incorrectTestArgs,
+								mockTest,
+								MakeString[HoldForm[{args}]]
+							]
+						,
+						opts = Cases[HoldComplete[args], OptionsPattern[]]
+						
+					}
+					,
+					testError[msg, opts]
 				]
 		]
 	}

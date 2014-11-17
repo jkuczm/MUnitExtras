@@ -4,16 +4,16 @@
 (*SetUp*)
 
 
-Begin["TestEnvironment`TestsOfTests`TestCaseOfTestResult`"];
+Begin["TestEnvironment`TestsOfTests`TestCaseOfTestResult`"]
 
 
-Needs["MUnitExtras`TestsOfTests`"];
+Needs["MUnitExtras`TestsOfTests`"]
 
 
 PrependTo[$ContextPath, "MUnit`Package`"]
 
 
-Needs["EvaluationUtilities`"]; (* TraceLog, HoldFunctionsEvaluation *)
+Needs["EvaluationUtilities`"] (* TraceLog, HoldFunctionsEvaluation *)
 
 
 (* ::Section:: *)
@@ -24,52 +24,67 @@ Needs["EvaluationUtilities`"]; (* TraceLog, HoldFunctionsEvaluation *)
 (*no args*)
 
 
-Test[
-	HoldFunctionsEvaluation[
-		{testError}
+Module[
+	{result}
+	,
+	TestMatch[
+		HoldFunctionsEvaluation[
+			{testError}
+			,
+			result = TestCaseOfTestResult[]
+		]
 		,
-		TestCaseOfTestResult[]
-	]
-	,
-	HoldComplete @ testError[
+		HoldComplete[_testError]
+		,
+		TestID -> "no args: \
+TestCaseOfTestResult evaluation: testError is returned"
+	];
+	
+	Test[
+		result[[1, 1]]
+		,
 		"TestCaseOfTestResult called with incorrect arguments: {}."
-	]
-	,
-	TestID -> "no args: \
-TestCaseOfTestResult evaluation: \
-testError informing about incorrect arguments is returned"
-];
+		,
+		TestID -> "no args: \
+testError message"
+	];
+]
 
 
 (* ::Subsection:: *)
 (*1 arg*)
 
 
-With[
-	{tr = Unique["TestResultObject"]}
+Module[
+	{result}
 	,
-	Test[
-		HoldFunctionsEvaluation[
-			{testError}
-			,
-			TestCaseOfTestResult[tr]
-		]
+	With[
+		{tr = Unique["TestResultObject"]}
 		,
-		With[
-			{
-				errorMsg =
-					"TestCaseOfTestResult called with incorrect arguments: {"
-					<> SymbolName[tr] <> "}."
-			}
+		TestMatch[
+			HoldFunctionsEvaluation[
+				{testError}
+				,
+				result = TestCaseOfTestResult[tr]
+			]
 			,
-			HoldComplete @ testError[errorMsg]
-		]
-		,
-		TestID -> "1 arg: \
-TestCaseOfTestResult evaluation: \
-testError informing about incorrect arguments is returned"
-	];
-];
+			HoldComplete[_testError]
+			,
+			TestID -> "1 arg: \
+TestCaseOfTestResult evaluation: testError is returned"
+		];
+		
+		Test[
+			result[[1, 1]]
+			,
+			"TestCaseOfTestResult called with incorrect arguments: {"
+				<> SymbolName[tr] <> "}."
+			,
+			TestID -> "1 arg: \
+testError message"
+		];
+	]
+]
 
 
 (* ::Subsection:: *)
@@ -80,33 +95,39 @@ testError informing about incorrect arguments is returned"
 (*second not a list of rules*)
 
 
-With[
-	{tr = Unique["TestResultObject"]}
+Module[
+	{result}
 	,
-	Test[
-		HoldFunctionsEvaluation[
-			{testError}
-			,
-			TestCaseOfTestResult[tr, {FailureMode -> "Success", TestInput}]
-		]
+	With[
+		{tr = Unique["TestResultObject"]}
 		,
-		With[
-			{
-				errorMsg =
-					"TestCaseOfTestResult called with incorrect arguments: {"
+		TestMatch[
+			HoldFunctionsEvaluation[
+				{testError}
+				,
+				result =
+					TestCaseOfTestResult[tr, {FailureMode -> "Success", TestInput}]
+			]
+			,
+			HoldComplete[_testError]
+			,
+			TestID -> "2 args: second not a list of rules: \
+TestCaseOfTestResult evaluation: testError is returned"
+		];
+		
+		Test[
+			result[[1, 1]]
+			,
+			"TestCaseOfTestResult called with incorrect arguments: {"
 <> SymbolName[tr] <> ", \
 {FailureMode -> \"Success\", TestInput}\
 }."
-			}
 			,
-			HoldComplete @ testError[errorMsg]
-		]
-		,
-		TestID -> "2 args: second not a list of rules: \
-TestCaseOfTestResult evaluation: \
-testError informing about incorrect arguments is returned"
-	];
-];
+			TestID -> "2 args: second not a list of rules: \
+testError message"
+		];
+	]
+]
 
 
 (* ::Subsubsection:: *)
@@ -116,8 +137,8 @@ testError informing about incorrect arguments is returned"
 Module[
 	{tr, $Log}
 	,
-	TestStringMatch[
-		SymbolName @ Block[
+	Test[
+		(*TestResultQ @*) Block[
 			{logTestResult}
 			,
 			TraceLog[
@@ -126,7 +147,7 @@ Module[
 			]
 		]
 		,
-		"TestResultObject*"
+		True
 		,
 		TestID -> "1 arg: no tests, no messages: \
 TestCaseOfTestResult evaluation"
@@ -135,7 +156,7 @@ TestCaseOfTestResult evaluation"
 	Test[
 		$Log,
 		HoldForm[TestsOfTestsEnvironment["no tests, no messages"]],
-		EquivalenceFunction -> MemberQ,
+		SameTest -> MemberQ,
 		TestID -> "1 arg: no tests, no messages: \
 TestsOfTestsEnvironment was called with proper arguments"
 	];
@@ -158,7 +179,7 @@ TestCaseOfTestResult result: ActualOutput"
 		TestID -> "1 arg: no tests, no messages: \
 TestCaseOfTestResult result: ExpectedMessages"
 	];
-];
+]
 
 
 (* ::Subsubsection:: *)
@@ -168,8 +189,8 @@ TestCaseOfTestResult result: ExpectedMessages"
 Module[
 	{tr, $Log}
 	,
-	TestStringMatch[
-		SymbolName @ Block[
+	Test[
+		TestResultQ @ Block[
 			{logTestResult}
 			,
 			TraceLog[
@@ -178,7 +199,7 @@ Module[
 			]
 		]
 		,
-		"TestResultObject*"
+		True
 		,
 		TestID -> "1 arg: no tests, message: \
 TestCaseOfTestResult evaluation"
@@ -187,7 +208,7 @@ TestCaseOfTestResult evaluation"
 	Test[
 		$Log,
 		HoldForm[TestsOfTestsEnvironment[Message[Sin::argx, Sin, 2]]],
-		EquivalenceFunction -> MemberQ,
+		SameTest -> MemberQ,
 		TestID -> "1 arg: no tests, message: \
 TestsOfTestsEnvironment was called with proper arguments"
 	];
@@ -210,7 +231,7 @@ TestCaseOfTestResult result: ActualOutput"
 		TestID -> "1 arg: no tests, message: \
 TestCaseOfTestResult result: ExpectedMessages"
 	];
-];
+]
 
 
 (* ::Subsubsection:: *)
@@ -220,8 +241,8 @@ TestCaseOfTestResult result: ExpectedMessages"
 Module[
 	{tr, trInternal, $Log}
 	,
-	TestStringMatch[
-		SymbolName @ Block[
+	Test[
+		TestResultQ @ Block[
 			{logTestResult}
 			,
 			TraceLog[
@@ -234,7 +255,7 @@ Module[
 			]
 		]
 		,
-		"TestResultObject*"
+		True
 		,
 		TestID -> "1 arg: tests: \
 TestCaseOfTestResult evaluation"
@@ -247,7 +268,7 @@ TestCaseOfTestResult evaluation"
 			trInternal = Test[True, True, TestID -> "TestID: 1 arg: tests"]
 		]
 		,
-		EquivalenceFunction -> MemberQ,
+		SameTest -> MemberQ,
 		TestID -> "1 arg: tests: \
 TestsOfTestsEnvironment was called with proper arguments"
 	];
@@ -270,7 +291,7 @@ TestCaseOfTestResult result: ActualOutput"
 		TestID -> "1 arg: tests: \
 TestCaseOfTestResult result: ExpectedMessages"
 	];
-];
+]
 
 
 (* ::Subsubsection:: *)
@@ -280,8 +301,8 @@ TestCaseOfTestResult result: ExpectedMessages"
 Module[
 	{tr, trInternal, $Log}
 	,
-	TestStringMatch[
-		SymbolName @ Block[
+	Test[
+		TestResultQ @ Block[
 			{logTestResult}
 			,
 			TraceLog[
@@ -295,7 +316,7 @@ Module[
 			]
 		]
 		,
-		"TestResultObject*"
+		True
 		,
 		TestID -> "1 arg: tests, options: \
 TestCaseOfTestResult evaluation"
@@ -308,7 +329,7 @@ TestCaseOfTestResult evaluation"
 			trInternal = Test[True, True]
 		]
 		,
-		EquivalenceFunction -> MemberQ,
+		SameTest -> MemberQ,
 		TestID -> "1 arg: tests, options: \
 TestsOfTestsEnvironment was called with proper arguments"
 	];
@@ -344,7 +365,7 @@ TestCaseOfTestResult result: TestID"
 		TestID -> "1 arg: tests, options: \
 internal Test result: TestID"
 	];
-];
+]
 
 
 (* ::Subsection:: *)
@@ -358,8 +379,8 @@ internal Test result: TestID"
 Module[
 	{tr, trInternal, $Log}
 	,
-	TestStringMatch[
-		SymbolName @ Block[
+	Test[
+		TestResultQ @ Block[
 			{logTestResult}
 			,
 			TraceLog[
@@ -378,7 +399,7 @@ Module[
 			]
 		]
 		,
-		"TestResultObject*"
+		True
 		,
 		TestID -> "2 arg: tests, no messages: \
 TestCaseOfTestResult evaluation"
@@ -392,7 +413,7 @@ TestCaseOfTestResult evaluation"
 				Test[True, True, TestID -> "TestID: 2 arg: tests, no messages"]
 		]
 		,
-		EquivalenceFunction -> MemberQ,
+		SameTest -> MemberQ,
 		TestID -> "2 arg: tests, no messages: \
 TestsOfTestsEnvironment was called with proper arguments"
 	];
@@ -415,7 +436,7 @@ TestCaseOfTestResult result: ActualOutput"
 		TestID -> "2 arg: tests, no messages: \
 TestCaseOfTestResult result: ExpectedMessages"
 	];
-];
+]
 
 
 (* ::Subsubsection:: *)
@@ -425,8 +446,8 @@ TestCaseOfTestResult result: ExpectedMessages"
 Module[
 	{tr, trInternal, $Log}
 	,
-	TestStringMatch[
-		SymbolName @ Block[
+	Test[
+		TestResultQ @ Block[
 			{logTestResult}
 			,
 			TraceLog[
@@ -446,7 +467,7 @@ Module[
 			]
 		]
 		,
-		"TestResultObject*"
+		True
 		,
 		TestID -> "2 arg: tests, messages: \
 TestCaseOfTestResult evaluation"
@@ -461,7 +482,7 @@ TestCaseOfTestResult evaluation"
 				Test[True, True, TestID -> "TestID: 2 arg: tests, messages"]
 		]
 		,
-		EquivalenceFunction -> MemberQ,
+		SameTest -> MemberQ,
 		TestID -> "2 arg: tests, messages: \
 TestsOfTestsEnvironment was called with proper arguments"
 	];
@@ -484,7 +505,7 @@ TestCaseOfTestResult result: ActualOutput"
 		TestID -> "2 arg: tests, messages: \
 TestCaseOfTestResult result: ExpectedMessages"
 	];
-];
+]
 
 
 (* ::Subsection:: *)
@@ -492,36 +513,44 @@ TestCaseOfTestResult result: ExpectedMessages"
 
 
 Module[
-	{$Log}
+	{$Log, result}
 	,
-	Test[
+	TestMatch[
 		HoldFunctionsEvaluation[
 			{testError}
 			,
 			TraceLog[
-				TestCaseOfTestResult["arg1", {Message[Sin::argx, Sin, 2]}, "arg3"],
+				result =
+					TestCaseOfTestResult["arg1", {Message[Sin::argx, Sin, 2]}, "arg3"]
+				,
 				_TestsOfTestsEnvironment -> $Log
 			]
 		]
 		,
-		HoldComplete @ testError[
-			"TestCaseOfTestResult called with incorrect arguments: \
-{\"arg1\", {Message[Sin::argx, Sin, 2]}, \"arg3\"}."
-		]
+		HoldComplete[_testError]
 		,
 		TestID -> "3 args: \
-TestCaseOfTestResult evaluation: \
-testError informing about incorrect arguments is returned"
+TestCaseOfTestResult evaluation: testError is returned"
+	];
+	
+	Test[
+		result[[1, 1]]
+		,
+		"TestCaseOfTestResult called with incorrect arguments: \
+{\"arg1\", {Message[Sin::argx, Sin, 2]}, \"arg3\"}."
+		,
+		TestID -> "3 args: \
+testError message"
 	];
 	
 	Test[
 		$Log,
 		HoldForm[_TestsOfTestsEnvironment],
-		EquivalenceFunction -> (!MemberQ[##]&),
+		SameTest -> (!MemberQ[##]&),
 		TestID -> "3 args: \
 TestsOfTestsEnvironment was not called"
 	];
-];
+]
 
 
 (* ::Section:: *)
@@ -529,8 +558,8 @@ TestsOfTestsEnvironment was not called"
 
 
 (* Remove all symbols defined in current context. *)
-Unprotect["`*"];
-Quiet[Remove["`*"], {Remove::rmnsm}];
+Unprotect["`*"]
+Quiet[Remove["`*"], {Remove::rmnsm}]
 
 
-End[];
+End[]

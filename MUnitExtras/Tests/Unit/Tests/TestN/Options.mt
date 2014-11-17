@@ -4,22 +4,22 @@
 (*SetUp*)
 
 
-Begin["TestEnvironment`Tests`TestN`Options`"];
+Begin["TestEnvironment`Tests`TestN`Options`"]
 
 
-Needs["MUnitExtras`Tests`"];
-Needs["MUnitExtras`MUnit`"];
-Needs["MUnitExtras`TestsOfTests`"];
+Needs["MUnitExtras`Tests`"]
+Needs["MUnitExtras`MUnit`"]
+Needs["MUnitExtras`TestsOfTests`"]
 
 
 (* Symbols with numeric values *)
-N[a] = 2.;
-N[b] = 5.;
+N[a] = 2.
+N[b] = 5.
 
 
 (* Alternative numeric function *)
-myN[a] ^= 3.;
-myN[b] ^= 4.;
+myN[a] ^= 3.
+myN[b] ^= 4.
 myN[x_?AtomQ] := N[x]
 myN[x_] := myN /@ x
 
@@ -51,7 +51,7 @@ TestCaseOfTest[
 		,
 		TestID -> "tested TestID: N option: Success"
 		,
-		EquivalenceFunction -> Equal,
+		SameTest -> Equal,
 		InputWrapper -> myN,
 		ExpectedWrapper -> myN
 	}
@@ -81,7 +81,7 @@ TestCaseOfTest[
 		,
 		TestID -> "tested TestID: N option: Failure"
 		,
-		EquivalenceFunction -> Equal,
+		SameTest -> Equal,
 		InputWrapper -> myN,
 		ExpectedWrapper -> myN
 	}
@@ -113,7 +113,7 @@ TestCaseOfTest[
 		,
 		TestID -> "tested TestID: InputWrapper option: Success"
 		,
-		EquivalenceFunction -> Equal,
+		SameTest -> Equal,
 		InputWrapper -> myN,
 		ExpectedWrapper -> N
 	}
@@ -143,7 +143,7 @@ TestCaseOfTest[
 		,
 		TestID -> "tested TestID: InputWrapper option: Failure"
 		,
-		EquivalenceFunction -> Equal,
+		SameTest -> Equal,
 		InputWrapper -> myN,
 		ExpectedWrapper -> N
 	}
@@ -175,7 +175,7 @@ TestCaseOfTest[
 		,
 		TestID -> "tested TestID: ExpectedWrapper option: Success"
 		,
-		EquivalenceFunction -> Equal,
+		SameTest -> Equal,
 		InputWrapper -> N,
 		ExpectedWrapper -> myN
 	}
@@ -205,7 +205,7 @@ TestCaseOfTest[
 		,
 		TestID -> "tested TestID: ExpectedWrapper option: Failure"
 		,
-		EquivalenceFunction -> Equal,
+		SameTest -> Equal,
 		InputWrapper -> N,
 		ExpectedWrapper -> myN
 	}
@@ -237,7 +237,7 @@ TestCaseOfTest[
 		,
 		TestID -> "tested TestID: ApplyToInput option: Success"
 		,
-		EquivalenceFunction -> Equal,
+		SameTest -> Equal,
 		InputWrapper -> N,
 		ExpectedWrapper -> N
 		,
@@ -253,8 +253,8 @@ TestCaseOfTest[
 
 
 (* Remove all symbols defined in current context. *)
-Unprotect["`*"];
-Quiet[Remove["`*"], {Remove::rmnsm}];
+Unprotect["`*"]
+Quiet[Remove["`*"], {Remove::rmnsm}]
 
 
-End[];
+End[]

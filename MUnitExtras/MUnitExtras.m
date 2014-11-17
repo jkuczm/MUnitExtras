@@ -5,8 +5,7 @@ BeginPackage["MUnitExtras`", {
 	"MUnitExtras`MUnit`",
 	"MUnitExtras`Tests`",
 	"MUnitExtras`TestCases`",
-	"MUnitExtras`TestEnvironment`",
-	"MUnitExtras`MeetLogger`"
+	"MUnitExtras`TestEnvironment`"
 }]
 
 

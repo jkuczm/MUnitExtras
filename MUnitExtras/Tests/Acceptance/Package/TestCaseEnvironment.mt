@@ -43,14 +43,19 @@ Block[
 	{$TestResultLog = {}}
 	,
 	Test[
+		MUnit`Package`$lexicalTestIndex--;
 		Block[
-			{MUnit`Package`logTestResult = mockLogTestResult}
+			{
+				MUnit`Package`logTestResult = mockLogTestResult,
+				MUnit`Package`$TestIndex = 0,
+				MUnit`Package`$dynamicTestIndex = 0
+			}
 			,
 			mockTestCase[
 				1 + 3,
 				1 * 3,
 				4,
-				EquivalenceFunction -> Equal,
+				SameTest -> Equal,
 				TestFailureMessage -> "test case failure message",
 				TestID -> "mockID"
 			]
@@ -85,10 +90,10 @@ First Test: TestResultObject: FailureMode"
 First Test: TestResultObject: TestID"
 			];
 		Test[
-			EquivalenceFunction[tr],
+			SameTest[tr],
 			Equal,
 			TestID -> "Success and Failure: \
-First Test: TestResultObject: EquivalenceFunction"
+First Test: TestResultObject: SameTest"
 		];
 		Test[
 			TestFailureMessageGenerator[tr][tr],
@@ -114,10 +119,10 @@ Second Test: TestResultObject: FailureMode"
 Second Test: TestResultObject: TestID"
 		];
 		Test[
-			EquivalenceFunction[tr],
+			SameTest[tr],
 			Equal,
 			TestID -> "Success and Failure: \
-Second Test: TestResultObject: EquivalenceFunction"
+Second Test: TestResultObject: SameTest"
 		];
 		Test[
 			TestFailureMessageGenerator[tr][tr],
@@ -136,21 +141,26 @@ Second Test: TestResultObject: TestFailureMessageGenerator evaluation"
 Block[
 	{$TestResultLog = {}}
 	,
-	TestStringMatch[
+	Test[
+		MUnit`Package`$lexicalTestIndex--;
 		Block[
-			{MUnit`Package`logTestResult = mockLogTestResult}
+			{
+				MUnit`Package`logTestResult = mockLogTestResult,
+				MUnit`Package`$TestIndex = 0,
+				MUnit`Package`$dynamicTestIndex = 0
+			}
 			,
-			SymbolName @ mockTestCase[
+			TestResultQ @ mockTestCase[
 				"forbiden value",
 				1,
 				1,
-				EquivalenceFunction -> Equal,
+				SameTest -> Equal,
 				TestFailureMessage -> "test case failure message",
 				TestID -> "mockIDError"
 			]
 		]
 		,
-		"TestResultObject*"
+		True
 		,
 		TestID -> "Test case level error: \
 mockTestCase evaluation"

@@ -53,14 +53,18 @@ mockTest options same as Test options"
 	];
 	
 	
-	TestStringMatch[
+	Test[
 		Block[
-			{MUnit`Package`logTestResult}
+			{
+				MUnit`Package`logTestResult,
+				MUnit`Package`$TestIndex = 0,
+				MUnit`Package`$dynamicTestIndex = 0
+			}
 			,
-			SymbolName[tr = mockTest["arg1", "arg2"]]
+			TestResultQ[tr = mockTest["arg1", "arg2"]]
 		]
 		,
-		"TestResultObject*"
+		True
 		,
 		TestID -> "1 symbol: \
 mockTest evaluation"
@@ -115,14 +119,18 @@ mockTest options same as mockTestOld2 options"
 	];
 	
 	
-	TestStringMatch[
+	Test[
 		Block[
-			{MUnit`Package`logTestResult}
+			{
+				MUnit`Package`logTestResult,
+				MUnit`Package`$TestIndex = 0,
+				MUnit`Package`$dynamicTestIndex = 0
+			}
 			,
-			SymbolName[tr = mockTest["arg1", "arg2"]]
+			TestResultQ[tr = mockTest["arg1", "arg2"]]
 		]
 		,
-		"TestResultObject*"
+		True
 		,
 		TestID -> "2 symbols: \
 mockTest evaluation"
@@ -182,14 +190,18 @@ mockTest options same as mockTestOld1 and mockTestOld2 options"
 	];
 	
 	
-	TestStringMatch[
+	Test[
 		Block[
-			{MUnit`Package`logTestResult}
+			{
+				MUnit`Package`logTestResult,
+				MUnit`Package`$TestIndex = 0,
+				MUnit`Package`$dynamicTestIndex = 0
+			}
 			,
-			SymbolName[tr = mockTest["arg1", "arg2"]]
+			TestResultQ[tr = mockTest["arg1", "arg2"]]
 		]
 		,
-		"TestResultObject*"
+		True
 		,
 		TestID -> "1 symbol, list of 2 symbols: \
 mockTest evaluation"

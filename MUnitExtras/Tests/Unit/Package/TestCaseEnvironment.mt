@@ -4,22 +4,22 @@
 (*SetUp*)
 
 
-Begin["TestEnvironment`Package`TestCaseEnvironment`"];
+Begin["TestEnvironment`Package`TestCaseEnvironment`"]
 
 
-Needs["MUnitExtras`Package`"];
-Needs["MUnitExtras`MUnit`"];
+Needs["MUnitExtras`Package`"]
+Needs["MUnitExtras`MUnit`"]
 
 
 PrependTo[$ContextPath, "MUnit`Package`"]
 
 
-Needs["EvaluationUtilities`"]; (* HoldFunctionsEvaluation *)
-Needs["StringUtilities`"]; (* StringJoinBy *)
+Needs["EvaluationUtilities`"] (* HoldFunctionsEvaluation *)
+Needs["StringUtilities`"] (* StringJoinBy *)
 
 
-optionsOriginalTest = Options[Test];
-optionsOriginalTestMatch = Options[TestMatch];
+optionsOriginalTest = Options[Test]
+optionsOriginalTestMatch = Options[TestMatch]
 
 
 TFMGReplaceRule[
@@ -34,7 +34,7 @@ TFMGReplaceRule[
 				messageGenerator[#1],
 				{"Separator" -> separator}
 			]&)
-		);
+		)
 
 
 (* ::Section:: *)
@@ -45,43 +45,62 @@ TFMGReplaceRule[
 (*no args*)
 
 
-Test[
-	HoldFunctionsEvaluation[
-		{testError}
+Module[
+	{result}
+	,
+	TestMatch[
+		HoldFunctionsEvaluation[
+			{testError}
+			,
+			result = TestCaseEnvironment[]
+		]
 		,
-		TestCaseEnvironment[]
-	]
-	,
-	HoldComplete @ testError[
+		HoldComplete[_testError]
+		,
+		TestID -> "no args: \
+TestCaseEnvironment evaluation: testError is returned"
+	];
+	
+	Test[
+		result[[1, 1]]
+		,
 		"TestCaseEnvironment called with incorrect arguments: {}."
-	]
-	,
-	TestID -> "no args: \
-TestCaseEnvironment evaluation: \
-testError informing about incorrect arguments is returned"
-];
+		,
+		TestID -> "no args: \
+testError message"
+	];
+]
 
 
 (* ::Subsection:: *)
 (*1 arg*)
 
 
-Test[
-	HoldFunctionsEvaluation[
-		{testError}
+Module[
+	{result}
+	,
+	TestMatch[
+		HoldFunctionsEvaluation[
+			{testError}
+			,
+			result = TestCaseEnvironment[{}]
+		]
 		,
-		TestCaseEnvironment[{}]
-	]
-	,
-	HoldComplete @ testError[
-		"TestCaseEnvironment called with incorrect arguments: {{}}.",
-		{}
-	]
-	,
-	TestID -> "1 arg: \
-TestCaseEnvironment evaluation: \
-testError informing about incorrect arguments is returned"
-];
+		HoldComplete[_testError]
+		,
+		TestID -> "1 arg: \
+TestCaseEnvironment evaluation: testError is returned"
+	];
+	
+	Test[
+		result[[1, 1]]
+		,
+		"TestCaseEnvironment called with incorrect arguments: {{}}."
+		,
+		TestID -> "1 arg: \
+testError message"
+	];
+]
 
 
 (* ::Subsection:: *)
@@ -133,7 +152,7 @@ Test options are unchanged outside TestCaseEnvironment"
 		TestID -> "2 args: nothing passed: \
 TestMatch options are unchanged outside TestCaseEnvironment"
 	];
-];
+]
 
 
 (* ::Subsubsection:: *)
@@ -141,13 +160,13 @@ TestMatch options are unchanged outside TestCaseEnvironment"
 
 
 Module[
-	{optionsInsideTest, optionsInsideTestMatch}
+	{optionsInsideTest, optionsInsideTestMatch, result}
 	,
-	Test[
+	TestMatch[
 		HoldFunctionsEvaluation[
 			{testError}
 			,
-			TestCaseEnvironment[
+			result = TestCaseEnvironment[
 				{"non-option"}
 				,
 				optionsInsideTest = Options[Test];
@@ -155,23 +174,23 @@ Module[
 			]
 		]
 		,
-		With[
-			{
-				errorMsg =
-					"TestCaseEnvironment called with incorrect arguments: \
+		HoldComplete[_testError]
+		,
+		TestID -> "2 args: non-option passed: \
+TestCaseEnvironment evaluation: testError is returned"
+	];
+	Test[
+		result[[1, 1]]
+		,
+		"TestCaseEnvironment called with incorrect arguments: \
 {\
 {\"non-option\"}, " <>
 SymbolName[Unevaluated[optionsInsideTest]] <> " = Options[Test]; " <>
 SymbolName[Unevaluated[optionsInsideTestMatch]] <> " = Options[TestMatch]; \
 }."
-			}
-			,
-			HoldComplete @ testError[errorMsg]
-		]
 		,
 		TestID -> "2 args: non-option passed: \
-TestCaseEnvironment evaluation: \
-testError informing about incorrect arguments is returned"
+testError message"
 	];
 	TestMatch[
 		optionsInsideTest,
@@ -197,7 +216,7 @@ Test options are unchanged outside TestCaseEnvironment"
 		TestID -> "2 args: non-option passed: \
 TestMatch options are unchanged outside TestCaseEnvironment"
 	];
-];
+]
 
 
 (* ::Subsubsection:: *)
@@ -208,10 +227,11 @@ Module[
 	{optionsInsideTest, optionsInsideTestMatch}
 	,
 	Test[
+		MUnit`Package`$lexicalTestIndex--;
 		TestCaseEnvironment[
 			{
 				TestID -> "mockID",
-				EquivalenceFunction -> Equal,
+				SameTestVersioned -> Equal,
 				TestFailureMessage -> "mockTestFailureMessage"
 			}
 			,
@@ -225,11 +245,13 @@ Module[
 TestCaseEnvironment evaluation"
 	];
 	Test[
-		optionsInsideTest,
+		MUnit`Package`$lexicalTestIndex -= 2;
+		optionsInsideTest
+		,
 		optionsOriginalTest /. {
 			TFMGReplaceRule["mockTestFailureMessage"],
 			(TestID -> _) -> (TestID -> "mockID"),
-			(EquivalenceFunction -> _) -> (EquivalenceFunction -> Equal),
+			(SameTestVersioned -> _) -> (SameTestVersioned -> Equal),
 			(TestFailureMessage -> _) ->
 				(TestFailureMessage -> "mockTestFailureMessage")
 		}
@@ -238,11 +260,13 @@ TestCaseEnvironment evaluation"
 Test options inside"
 	];
 	Test[
-		optionsInsideTestMatch,
+		MUnit`Package`$lexicalTestIndex -= 2;
+		optionsInsideTestMatch
+		,
 		optionsOriginalTestMatch /. {
 			TFMGReplaceRule["mockTestFailureMessage"],
 			(TestID -> _) -> (TestID -> "mockID"),
-			(EquivalenceFunction -> _) -> (EquivalenceFunction -> Equal),
+			(SameTestVersioned -> _) -> (SameTestVersioned -> Equal),
 			(TestFailureMessage -> _) ->
 				(TestFailureMessage -> "mockTestFailureMessage")
 		}
@@ -262,7 +286,7 @@ Test options are unchanged outside TestCaseEnvironment"
 		TestID -> "2 args: options passed: \
 TestMatch options are unchanged outside TestCaseEnvironment"
 	];
-];
+]
 
 
 (* ::Subsubsection:: *)
@@ -285,7 +309,7 @@ Test[
 	TestID -> "2 args: test error thrown: \
 TestCaseEnvironment evaluation: \
 testError with thrown message is returned"
-];
+]
 
 
 (* ::Subsection:: *)
@@ -300,10 +324,11 @@ Module[
 	{optionsInsideTest, optionsInsideTestMatch}
 	,
 	Test[
+		MUnit`Package`$lexicalTestIndex--;
 		TestCaseEnvironment[
 			{
 				TestID -> "mockID",
-				EquivalenceFunction -> Equal,
+				SameTestVersioned -> Equal,
 				TestFailureMessage -> "mockTestFailureMessage"
 			}
 			,
@@ -325,11 +350,13 @@ TestCaseEnvironment evaluation"
 Test options inside"
 	];
 	Test[
-		optionsInsideTestMatch,
+		MUnit`Package`$lexicalTestIndex -= 2;
+		optionsInsideTestMatch
+		,
 		optionsOriginalTestMatch /. {
 			TFMGReplaceRule["mockTestFailureMessage"],
 			(TestID -> _) -> (TestID -> "mockID"),
-			(EquivalenceFunction -> _) -> (EquivalenceFunction -> Equal),
+			(SameTestVersioned -> _) -> (SameTestVersioned -> Equal),
 			(TestFailureMessage -> _) ->
 				(TestFailureMessage -> "mockTestFailureMessage")
 		}
@@ -349,7 +376,7 @@ Test options are unchanged outside TestCaseEnvironment"
 		TestID -> "2 args, non-default \"CommonOptionsFor\": options passed: \
 TestMatch options are unchanged outside TestCaseEnvironment"
 	];
-];
+]
 
 
 (* ::Subsection:: *)
@@ -357,13 +384,13 @@ TestMatch options are unchanged outside TestCaseEnvironment"
 
 
 Module[
-	{optionsInsideTest, optionsInsideTestMatch}
+	{optionsInsideTest, optionsInsideTestMatch, result}
 	,
-	Test[
+	TestMatch[
 		HoldFunctionsEvaluation[
 			{testError}
 			,
-			TestCaseEnvironment[
+			result = TestCaseEnvironment[
 				{}
 				,
 				optionsInsideTest = Options[Test];
@@ -373,24 +400,24 @@ Module[
 			]
 		]
 		,
-		With[
-			{
-				errorMsg =
-					"TestCaseEnvironment called with incorrect arguments: \
+		HoldComplete[_testError]
+		,
+		TestID -> "3 args: \
+TestCaseEnvironment evaluation: testError is returned"
+	];
+	Test[
+		result[[1, 1]]
+		,
+		"TestCaseEnvironment called with incorrect arguments: \
 {\
 {}, " <>
 SymbolName[Unevaluated[optionsInsideTest]] <> " = Options[Test]; " <>
 SymbolName[Unevaluated[optionsInsideTestMatch]] <> " = Options[TestMatch]; , \
 Null\
 }."
-			}
-			,
-			HoldComplete @ testError[errorMsg, {}]
-		]
 		,
 		TestID -> "3 args: \
-TestCaseEnvironment evaluation: \
-testError informing about incorrect arguments is returned"
+testError message"
 	];
 	TestMatch[
 		optionsInsideTest,
@@ -416,7 +443,7 @@ Test options are unchanged outside TestCaseEnvironment"
 		TestID -> "3 args: \
 TestMatch options are unchanged outside TestCaseEnvironment"
 	];
-];
+]
 
 
 (* ::Section:: *)
@@ -424,8 +451,8 @@ TestMatch options are unchanged outside TestCaseEnvironment"
 
 
 (* Remove all symbols defined in current context. *)
-Unprotect["`*"];
-Quiet[Remove["`*"], {Remove::rmnsm}];
+Unprotect["`*"]
+Quiet[Remove["`*"], {Remove::rmnsm}]
 
 
-End[];
+End[]

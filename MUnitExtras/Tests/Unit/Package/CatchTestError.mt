@@ -4,13 +4,13 @@
 (*SetUp*)
 
 
-Begin["TestEnvironment`Package`CatchTestError`"];
+Begin["TestEnvironment`Package`CatchTestError`"]
 
 
-Needs["EvaluationUtilities`"]; (* HoldFunctionsEvaluation *)
+Needs["EvaluationUtilities`"] (* HoldFunctionsEvaluation *)
 
 
-Needs["MUnitExtras`Package`"];
+Needs["MUnitExtras`Package`"]
 
 
 PrependTo[$ContextPath, "MUnit`Package`"]
@@ -20,52 +20,79 @@ PrependTo[$ContextPath, "MUnit`Package`"]
 (*Tests*)
 
 
-Test[
-	HoldFunctionsEvaluation[
-		{testError}
-		,
-		CatchTestError[]
-	]
+Module[
+	{result}
 	,
-	HoldComplete @ testError[
+	TestMatch[
+		HoldFunctionsEvaluation[
+			{testError}
+			,
+			result = CatchTestError[]
+		]
+		,
+		HoldComplete[_testError]
+		,
+		TestID -> "no args: testError is returned"
+	];
+	
+	Test[
+		result[[1, 1]]
+		,
 		"CatchTestError called with incorrect arguments: {}."
-	]
-	,
-	TestID -> "no args: \
-testError informing about incorrect arguments is returned"
-];
-
-
-Test[
-	HoldFunctionsEvaluation[
-		{testError}
 		,
-		CatchTestError["arg"]
-	]
+		TestID -> "no args: testError message"
+	];
+]
+
+
+Module[
+	{result}
 	,
-	HoldComplete @ testError[
+	TestMatch[
+		HoldFunctionsEvaluation[
+			{testError}
+			,
+			result = CatchTestError["arg"]
+		]
+		,
+		HoldComplete[_testError]
+		,
+		TestID -> "1 arg: testError is returned"
+	];
+	
+	Test[
+		result[[1, 1]]
+		,
 		"CatchTestError called with incorrect arguments: {\"arg\"}."
-	]
-	,
-	TestID -> "1 arg: \
-testError informing about incorrect arguments is returned"
-];
-
-
-Test[
-	HoldFunctionsEvaluation[
-		{testError}
 		,
-		CatchTestError["arg1", "arg2"]
-	]
+		TestID -> "1 arg: testError message"
+	];
+]
+
+
+Module[
+	{result}
 	,
-	HoldComplete @ testError[
+	TestMatch[
+		HoldFunctionsEvaluation[
+			{testError}
+			,
+			result = CatchTestError["arg1", "arg2"]
+		]
+		,
+		HoldComplete[_testError]
+		,
+		TestID -> "2 args: first non-list: testError is returned"
+	];
+	
+	Test[
+		result[[1, 1]]
+		,
 		"CatchTestError called with incorrect arguments: {\"arg1\", \"arg2\"}."
-	]
-	,
-	TestID -> "2 args: first non-list: \
-testError informing about incorrect arguments is returned"
-];
+		,
+		TestID -> "2 args: first non-list: testError message"
+	];
+]
 
 
 Test[
@@ -75,7 +102,7 @@ Test[
 	,
 	TestID -> "2 args: first list, no throws: \
 second argument is returned"
-];
+]
 
 
 Test[
@@ -94,7 +121,7 @@ Test[
 	,
 	TestID -> "2 args: first list, value with arbitrary tag thrown: \
 value is not caught"
-];
+]
 
 
 Test[
@@ -112,24 +139,33 @@ Test[
 	TestID -> "2 args: first list, \
 value with \"internalMUnitTestTag\" thrown: \
 value is caught and testError with value as error message is returned"
-];
+]
 
 
-Test[
-	HoldFunctionsEvaluation[
-		{testError}
-		,
-		CatchTestError[{"arg1"}, "arg2", "arg3"]
-	]
+Module[
+	{result}
 	,
-	HoldComplete @ testError[
+	TestMatch[
+		HoldFunctionsEvaluation[
+			{testError}
+			,
+			result = CatchTestError[{"arg1"}, "arg2", "arg3"]
+		]
+		,
+		HoldComplete[_testError]
+		,
+		TestID -> "3 args: testError is returned"
+	];
+	
+	Test[
+		result[[1, 1]]
+		,
 		"CatchTestError called with incorrect arguments: \
 {{\"arg1\"}, \"arg2\", \"arg3\"}."
-	]
-	,
-	TestID -> "3 args: \
-testError informing about incorrect arguments is returned"
-];
+		,
+		TestID -> "3 args: testError message"
+	];
+]
 
 
 (* ::Section:: *)
@@ -137,8 +173,8 @@ testError informing about incorrect arguments is returned"
 
 
 (* Remove all symbols defined in current context. *)
-Unprotect["`*"];
-Quiet[Remove["`*"], {Remove::rmnsm}];
+Unprotect["`*"]
+Quiet[Remove["`*"], {Remove::rmnsm}]
 
 
-End[];
+End[]

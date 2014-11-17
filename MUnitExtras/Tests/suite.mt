@@ -1,60 +1,41 @@
 TestSuite[{
-	"Unit/TestEnvironment/BeginTestEnvironment.mt"
-	,
+	"Unit/TestEnvironment/BeginTestEnvironment.mt",
 	"Unit/TestEnvironment/EndTestEnvironment.mt"
 	,
-	"Unit/Package/GetTestingFunctions.mt"
-	,
-	"Unit/Package/TestQ.mt"
-	,
-	"Unit/Package/ProtectTestSyntax.mt"
-	,
-	"Unit/Package/AssignTestFeatures.mt"
-	,
-	"Unit/Package/AddTestDefaultFunction.mt"
-	,
-	"Unit/Package/ThrowTestError.mt"
-	,
-	"Unit/Package/CatchTestError.mt"
-	,
+	"Unit/Package/MakeString.mt",
+	"Unit/Package/GetTestingFunctions.mt",
+	"Unit/Package/TestQ.mt",
+	"Unit/Package/ProtectTestSyntax.mt",
+	"Unit/Package/AssignTestFeatures.mt",
+	"Unit/Package/AddTestDefaultFunction.mt",
+	"Unit/Package/ThrowTestError.mt",
+	"Unit/Package/CatchTestError.mt",
 	"Unit/Package/TestCaseEnvironment.mt"
 	,
-	"Unit/TestsOfTests/TestsOfTestsEnvironment.mt"
-	,
+	"Unit/TestsOfTests/TestsOfTestsEnvironment.mt",
 	"Unit/TestsOfTests/TestOfTests.mt"
 	,
-	"Unit/Tests/Test/DefaultOptions.mt"
-	,
-	"Unit/Tests/Test/ApplyToInput.mt"
-	,
-	"Unit/Tests/Test/InputWrapper.mt"
-	,
-	"Unit/Tests/Test/ApplyToInput$InputWrapper.mt"
-	,
-	"Unit/Tests/Test/ApplyToExpected.mt"
-	,
-	"Unit/Tests/Test/ExpectedWrapper.mt"
-	,
-	"Unit/Tests/Test/ApplyToExpected$ExpectedWrapper.mt"
-	,
-	"Unit/Tests/TestN/Basic.mt"
-	,
-	"Unit/Tests/TestN/Errors.mt"
-	,
+	"Unit/Tests/Test/DefaultOptions.mt",
+	"Unit/Tests/Test/ApplyToInput.mt",
+	"Unit/Tests/Test/InputWrapper.mt",
+	"Unit/Tests/Test/ApplyToInput$InputWrapper.mt",
+	"Unit/Tests/Test/ApplyToExpected.mt",
+	"Unit/Tests/Test/ExpectedWrapper.mt",
+	"Unit/Tests/Test/ApplyToExpected$ExpectedWrapper.mt",
+	"Unit/Tests/TestN/Basic.mt",
+	"Unit/Tests/TestN/Errors.mt",
 	"Unit/Tests/TestN/Options.mt"
+	,
+	
+	"Acceptance/MUnitVersionsCompatibility.mt"
 	,
 	"Acceptance/BeginEndTestEnvironment.mt"
 	,
-	"Acceptance/Package/TestQ.mt"
-	,
-	"Acceptance/Package/ProtectTestSyntax.mt"
-	,
-	"Acceptance/Package/AssignTestFeatures.mt"
-	,
-	"Acceptance/Package/AddTestDefaultFunction.mt"
-	,
-	"Acceptance/Package/ThrowCatchTestError.mt"
-	,
+	"Acceptance/Package/TestQ.mt",
+	"Acceptance/Package/ProtectTestSyntax.mt",
+	"Acceptance/Package/AssignTestFeatures.mt",
+	"Acceptance/Package/AddTestDefaultFunction.mt",
+	"Acceptance/Package/ThrowCatchTestError.mt",
 	"Acceptance/Package/TestCaseEnvironment.mt"
 	,
 	"Acceptance/TestsOfTests/TestOfTests.mt"

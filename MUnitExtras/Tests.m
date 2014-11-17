@@ -170,7 +170,7 @@ PrependToOptions[TestN, N -> N]
 SetOptions[TestN,
 	InputWrapper -> Automatic,
 	ExpectedWrapper -> Automatic,
-	EquivalenceFunction -> Equal
+	SameTestVersioned -> Equal
 ]
 
 
@@ -231,23 +231,20 @@ TestN[input_, expected_, Shortest[messages_:{}], opts:OptionsPattern[]] :=
 					ToString @ StringForm[
 						General::notNumber,
 						#1,
-						MeetLogger`Private`makeString[#2]
+						MakeString[#2]
 					]
 				]
 			]& @@@
 				{
 					{
 						"Input: " <>
-							MeetLogger`Private`makeString[
-								HoldForm @@ holdPreprocessedInput
-							],
+							MakeString[HoldForm @@ holdPreprocessedInput]
+						,
 						inputN
 					},
 					{
 						"Expected: " <>
-							MeetLogger`Private`makeString[
-								HoldForm @@ holdPreprocessedExpected
-							]
+							MakeString[HoldForm @@ holdPreprocessedExpected]
 						,
 						expectedN
 					}
@@ -342,7 +339,7 @@ AddTestDefaultFunction[TestZero, 0]
 
 AddTestDefaultFunction[TestNonZero, 0]
 
-SetOptions[TestNonZero, EquivalenceFunction -> UnsameQ]
+SetOptions[TestNonZero, SameTestVersioned -> UnsameQ]
 
 
 (* ::Subsection:: *)
@@ -420,9 +417,8 @@ TestSubexpression[input_, Shortest[messages_:{}], opts:OptionsPattern[]] :=
 				ThrowTestError @ StringForm[
 					General::argExtractionFailed,
 					pos,
-					MeetLogger`Private`makeString[HoldForm[input]],
-					MeetLogger`Private`makeString /@
-						HoldForm @@@ extractionMessages[[1;;-1,1;;1]]
+					MakeString[HoldForm[input]],
+					MakeString /@ HoldForm @@@ extractionMessages[[1;;-1,1;;1]]
 				]
 			];
 			With[

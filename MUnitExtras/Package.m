@@ -7,6 +7,13 @@ BeginPackage["MUnitExtras`Package`"]
 (*Public*)
 
 
+MakeString::usage =
+"\
+MakeString[expr] \
+returns string representing expression expr in InputForm with possible \
+HoldForm wrapper removed from string."
+
+
 GetTestingFunctions::usage =
 "\
 GetTestingFunctions[] \
@@ -108,6 +115,13 @@ among optNamei and values not matching corresponding patt1 proper test error \
 message is thrown, otherwise Null is returned."
 
 
+SameTestVersioned::usage =
+"\
+SameTestVersioned\
+is SameTest for MUnit >= 1.4 and EquivalenceFunction for earlier versions of \
+MUnit."
+
+
 (* Unprotect all public symbols in this package. *)
 Unprotect["`*"];
 
@@ -163,20 +177,22 @@ Needs["MUnitExtras`MUnit`"]
 Needs["ProtectionUtilities`"] (* ProtectContextNonVariables *)
 Needs["OptionsUtilities`"] (* DelegateOptions, DeleteOptionDuplicates,
 	SaveOptions, RestoreOptions, CopyFeatures *)
-Needs["StringUtilities`"] (* StringJoinBy *)
+Needs["StringUtilities`"] (* StringTrimBoth, StringJoinBy *)
+
+
+(* ::Subsection:: *)
+(*MakeString*)
+
+
+MakeString[expr_] :=
+	StringTrimBoth[ToString[expr, InputForm], "HoldForm[", "]"]
 
 
 (* ::Subsection:: *)
 (*$TestingFunctions*)
 
 
-$TestingFunctions = {
-	(* MUnit`Test` *)
-	Test, TestMatch, TestStringMatch, TestFree, TestStringFree,
-	(* MUnit`WRI` *)
-	ConditionalTest, ExactTest, ExactTestCaveat, NTest, NTestCaveat, OrTest,
-	TestCaveat
-}
+$TestingFunctions = MUnitExtras`MUnit`Private`$MUnitTestingFunctions
 
 
 (* ::Subsection:: *)
@@ -199,18 +215,25 @@ TestQ[sym_] := MemberQ[$TestingFunctions, sym]
 
 ProtectTestSyntax[sym_Symbol] := (
 	sym[args___] :=
-		testError[
-			ToString @ StringForm[
-				General::incorrectTestArgs,
-				sym,
-				MeetLogger`Private`makeString[HoldForm[{args}]]
-			]
+		With[
+			{
+				msg =
+					ToString @ StringForm[
+						General::incorrectTestArgs,
+						sym,
+						MakeString[HoldForm[{args}]]
+					]
+				,
+				(*
+					Pass only options, other arguments are not used by
+					testError and passing them would evaluate them and we don't
+					want that.
+				*)
+				opts = Cases[HoldComplete[args], OptionsPattern[]]
+					
+			}
 			,
-			(*
-				Pass only options, other arguments are not used by testError
-				and passing them would evaluate them and we don't want that.
-			*)
-			Sequence @@ Cases[HoldComplete[args], OptionsPattern[]]
+			testError[msg, opts]
 		];
 )
 
@@ -239,6 +262,8 @@ AssignTestFeatures[
 		testFunc,
 		DelegateOptions[opts, AssignTestFeatures, CopyFeatures]
 	];
+	
+	MUnitExtras`MUnit`Private`MUnitVersionedTestOptionsPatch[testFunc];
 	
 	ProtectTestSyntax[testFunc];
 	
@@ -373,7 +398,22 @@ TestCaseEnvironment[
 						]&)
 				]
 				,
-				testCaseOptions
+				Replace[
+					Flatten[testCaseOptions]
+					,
+					If[MUnit`Information`$VersionNumber >= 1.4,
+						(rule:Rule | RuleDelayed)[
+							_Symbol?(SymbolName[#] === "EquivalenceFunction"&),
+							val_
+						] :>
+							rule[SameTest, val]
+					(* else *),
+						(rule:Rule | RuleDelayed)[SameTest, val_] :>
+							rule[MUnit`EquivalenceFunction, val]
+					]
+					,
+					{1}
+				]
 			];
 		
 		SetOptions[#, FilterRules[testCaseOptionsUnique, Options[#]]]& /@
@@ -467,6 +507,18 @@ CheckOptionsValues[
 				StringJoinBy[First[nonMatching]] <> " In " <> ToString[func]
 			]
 		];
+	]
+
+
+(* ::Subsection:: *)
+(*SameTestVersioned*)
+
+
+SameTestVersioned =
+	If[MUnit`Information`$VersionNumber >= 1.4,
+		SameTest
+	(* else *),
+		MUnit`EquivalenceFunction
 	]
 
 

@@ -21,7 +21,7 @@ TestCaseMy[input_, opts:OptionsPattern[]] :=
 		Test[
 			N[input],
 			4,
-			EquivalenceFunction -> Equal,
+			SameTest -> Equal,
 			TestFailureMessage -> "Numeric"
 		];
 	];

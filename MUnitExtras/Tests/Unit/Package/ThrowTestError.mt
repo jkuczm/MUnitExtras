@@ -4,13 +4,13 @@
 (*SetUp*)
 
 
-Begin["TestEnvironment`Package`ThrowTestError`"];
+Begin["TestEnvironment`Package`ThrowTestError`"]
 
 
-Needs["EvaluationUtilities`"]; (* HoldFunctionsEvaluation *)
+Needs["EvaluationUtilities`"] (* HoldFunctionsEvaluation *)
 
 
-Needs["MUnitExtras`Package`"];
+Needs["MUnitExtras`Package`"]
 
 
 PrependTo[$ContextPath, "MUnit`Package`"]
@@ -20,20 +20,29 @@ PrependTo[$ContextPath, "MUnit`Package`"]
 (*Tests*)
 
 
-Test[
-	HoldFunctionsEvaluation[
-		{testError}
+Module[
+	{result}
+	,
+	TestMatch[
+		HoldFunctionsEvaluation[
+			{testError}
+			,
+			result = ThrowTestError[]
+		]
 		,
-		ThrowTestError[]
-	]
-	,
-	HoldComplete @ testError[
+		HoldComplete[_testError]
+		,
+		TestID -> "no args: testError is returned"
+	];
+	
+	Test[
+		result[[1, 1]]
+		,
 		"ThrowTestError called with incorrect arguments: {}."
-	]
-	,
-	TestID -> "no args: \
-testError informing about incorrect arguments is returned"
-];
+		,
+		TestID -> "no args: testError message"
+	];
+]
 
 
 Test[
@@ -46,7 +55,7 @@ Test[
 	,
 	TestID -> "1 string arg: \
 given arg is thrown with proper tag"
-];
+]
 
 
 Test[
@@ -59,23 +68,32 @@ Test[
 	,
 	TestID -> "1 non-string arg: \
 given arg is converted to string and thrown with proper tag"
-];
+]
 
 
-Test[
-	HoldFunctionsEvaluation[
-		{testError}
+Module[
+	{result}
+	,
+	TestMatch[
+		HoldFunctionsEvaluation[
+			{testError}
+			,
+			result = ThrowTestError["1", "2"]
+		]
 		,
-		ThrowTestError["1", "2"]
-	]
-	,
-	HoldComplete @ testError[
+		HoldComplete[_testError]
+		,
+		TestID -> "two args: testError is returned"
+	];
+	
+	TestMatch[
+		result[[1, 1]]
+		,
 		"ThrowTestError called with incorrect arguments: {\"1\", \"2\"}."
-	]
-	,
-	TestID -> "two args: \
-testError informing about incorrect arguments is returned"
-];
+		,
+		TestID -> "two args: testError message"
+	];
+]
 
 
 (* ::Section:: *)
@@ -83,8 +101,8 @@ testError informing about incorrect arguments is returned"
 
 
 (* Remove all symbols defined in current context. *)
-Unprotect["`*"];
-Quiet[Remove["`*"], {Remove::rmnsm}];
+Unprotect["`*"]
+Quiet[Remove["`*"], {Remove::rmnsm}]
 
 
-End[];
+End[]

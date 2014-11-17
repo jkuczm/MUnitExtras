@@ -56,14 +56,14 @@ $TestingFunctions list have appended mockTest"
 			HoldForm[CopyFeatures[{Test}, mockTest, opts]] /.
 				opts -> optsCopyFeatures
 			,
-			EquivalenceFunction -> MemberQ,
+			SameTest -> MemberQ,
 			TestID -> "1 symbol: \
 CopyFeatures function was called with proper arguments"
 		];
 		Test[
 			$Log,
 			HoldForm[ProtectTestSyntax[mockTest]],
-			EquivalenceFunction -> MemberQ,
+			SameTest -> MemberQ,
 			TestID -> "1 symbol: \
 ProtectTestSyntax function was called with proper arguments"
 		];
@@ -106,14 +106,14 @@ $TestingFunctions list have appended mockTest"
 			HoldForm[CopyFeatures[{mockTestOld2}, mockTest, opts]] /.
 				opts -> optsCopyFeatures
 			,
-			EquivalenceFunction -> MemberQ,
+			SameTest -> MemberQ,
 			TestID -> "2 symbols: \
 CopyFeatures function was called with proper arguments"
 		];
 		Test[
 			$Log,
 			HoldForm[ProtectTestSyntax[mockTest]],
-			EquivalenceFunction -> MemberQ,
+			SameTest -> MemberQ,
 			TestID -> "2 symbols: \
 ProtectTestSyntax function was called with proper arguments"
 		];
@@ -157,14 +157,14 @@ $TestingFunctions list have appended mockTest"
 				{mockTestOld1, mockTestOld2}, mockTest, opts
 			] /. opts -> optsCopyFeatures
 			,
-			EquivalenceFunction -> MemberQ,
+			SameTest -> MemberQ,
 			TestID -> "1 symbol, list of 2 symbols: \
 CopyFeatures function was called with proper arguments"
 		];
 		Test[
 			$Log,
 			HoldForm[ProtectTestSyntax[mockTest]],
-			EquivalenceFunction -> MemberQ,
+			SameTest -> MemberQ,
 			TestID -> "1 symbol, list of 2 symbols: \
 ProtectTestSyntax function was called with proper arguments"
 		];
@@ -220,14 +220,14 @@ $TestingFunctions list have appended mockTest"
 				}
 			]
 			,
-			EquivalenceFunction -> MemberQ,
+			SameTest -> MemberQ,
 			TestID -> "1 symbol and options: \
 CopyFeatures function was called with proper arguments"
 		];
 		Test[
 			$Log,
 			HoldForm[ProtectTestSyntax[mockTest]],
-			EquivalenceFunction -> MemberQ,
+			SameTest -> MemberQ,
 			TestID -> "1 symbol and options: \
 ProtectTestSyntax function was called with proper arguments"
 		];

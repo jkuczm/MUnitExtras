@@ -4,13 +4,13 @@
 (*SetUp*)
 
 
-Begin["TestEnvironment`TestsOfTests`TestsOfTestsEnvironment`"];
+Begin["TestEnvironment`TestsOfTests`TestsOfTestsEnvironment`"]
 
 
-Needs["EvaluationUtilities`"]; (* HoldFunctionsEvaluation *)
+Needs["EvaluationUtilities`"] (* HoldFunctionsEvaluation *)
 
 
-Needs["MUnitExtras`TestsOfTests`"];
+Needs["MUnitExtras`TestsOfTests`"]
 
 
 PrependTo[$ContextPath, "MUnit`Package`"]
@@ -27,29 +27,39 @@ PrependTo[$ContextPath, "MUnit`Package`"]
 Block[
 	{$TestsOfTestsLog = {}}
 	,
-	Test[
-		HoldFunctionsEvaluation[
-			{testError}
+	Module[
+		{result}
+		,
+		TestMatch[
+			HoldFunctionsEvaluation[
+				{testError}
+				,
+				result = TestsOfTestsEnvironment[]
+			]
 			,
-			TestsOfTestsEnvironment[]
-		]
-		,
-		HoldComplete @ testError[
+			HoldComplete[_testError]
+			,
+			TestID -> "no args: \
+TestsOfTestsEnvironment evaluation: testError is returned"
+		];
+		
+		Test[
+			result[[1, 1]]
+			,
 			"TestsOfTestsEnvironment called with incorrect arguments: {}."
-		]
-		,
-		TestID -> "no args: \
-TestsOfTestsEnvironment evaluation: \
-testError informing about incorrect arguments is returned"
-	];
+			,
+			TestID -> "no args: \
+testError message"
+		];
 	
-	Test[
-		$TestsOfTestsLog,
-		{},
-		TestID -> "no args: \
+		Test[
+			$TestsOfTestsLog,
+			{},
+			TestID -> "no args: \
 nothing was logged in $TestsOfTestsLog"
-	];
-];
+		];
+	]
+]
 
 
 (* ::Subsection:: *)
@@ -77,7 +87,7 @@ TestsOfTestsEnvironment evaluation"
 		TestID -> "1 arg: no tests: \
 nothing was logged in $TestsOfTestsLog"
 	];
-];
+]
 
 
 (* ::Subsubsection:: *)
@@ -90,8 +100,8 @@ Module[
 	Block[
 		{$TestsOfTestsLog = {}}
 		,
-		TestStringMatch[
-			SymbolName @ TestsOfTestsEnvironment[
+		Test[
+			TestResultQ @ TestsOfTestsEnvironment[
 				tr =
 					Test[
 						True,
@@ -100,7 +110,7 @@ Module[
 					]
 			]
 			,
-			"TestResultObject*"
+			True
 			,
 			TestID -> "1 arg: 1 test result: \
 TestsOfTestsEnvironment evaluation"
@@ -112,8 +122,8 @@ TestsOfTestsEnvironment evaluation"
 			TestID -> "1 arg: 1 test result: \
 proper test results were logged in $TestsOfTestsLog"
 		];
-	];
-];
+	]
+]
 
 
 (* ::Subsubsection:: *)
@@ -154,8 +164,8 @@ TestsOfTestsEnvironment evaluation"
 			TestID -> "1 arg: 2 test results: \
 proper test results were logged in $TestsOfTestsLog"
 		];
-	];
-];
+	]
+]
 
 
 (* ::Subsubsection:: *)
@@ -201,8 +211,8 @@ TestsOfTestsEnvironment evaluation"
 			TestID -> "1 arg: 3 test results: \
 proper test results were logged in $TestsOfTestsLog"
 		];
-	];
-];
+	]
+]
 
 
 (* ::Subsection:: *)
@@ -212,45 +222,56 @@ proper test results were logged in $TestsOfTestsLog"
 Block[
 	{$TestsOfTestsLog = {}}
 	,
-	Test[
-		HoldFunctionsEvaluation[
-			{testError}
-			,
-			TestsOfTestsEnvironment[
-				Test[
-					True,
-					True,
-					TestID -> "TestID first arg: 2 args"
-				]
+	Module[
+		{result}
+		,
+		TestMatch[
+			MUnit`Package`$lexicalTestIndex -= 2;
+			HoldFunctionsEvaluation[
+				{testError}
 				,
-				Test[
-					False,
-					True,
-					TestID -> "TestID second arg: 2 args"
+				result = TestsOfTestsEnvironment[
+					Test[
+						True,
+						True,
+						TestID -> "TestID first arg: 2 args"
+					]
+					,
+					Test[
+						False,
+						True,
+						TestID -> "TestID second arg: 2 args"
+					]
 				]
 			]
-		]
-		,
-		HoldComplete @ testError[
+			,
+			HoldComplete[_testError]
+			,
+			TestID -> "2 args: \
+TestsOfTestsEnvironment evaluation: testError is returned"
+		];
+		
+		Test[
+			result[[1, 1]]
+			,
 			"TestsOfTestsEnvironment called with incorrect arguments: \
 {\
 Test[True, True, TestID -> \"TestID first arg: 2 args\"], \
 Test[False, True, TestID -> \"TestID second arg: 2 args\"]\
 }."
-		]
-		,
-		TestID -> "2 args: \
-TestsOfTestsEnvironment evaluation: \
-testError informing about incorrect arguments is returned"
-	];
-	
-	Test[
-		$TestsOfTestsLog,
-		{},
-		TestID -> "2 args: \
+			,
+			TestID -> "2 args: \
+testError message"
+		];
+		
+		Test[
+			$TestsOfTestsLog,
+			{},
+			TestID -> "2 args: \
 nothing was logged in $TestsOfTestsLog"
-	];
-];
+		];
+	]
+]
 
 
 (* ::Section:: *)
@@ -258,8 +279,8 @@ nothing was logged in $TestsOfTestsLog"
 
 
 (* Remove all symbols defined in current context. *)
-Unprotect["`*"];
-Quiet[Remove["`*"], {Remove::rmnsm}];
+Unprotect["`*"]
+Quiet[Remove["`*"], {Remove::rmnsm}]
 
 
-End[];
+End[]

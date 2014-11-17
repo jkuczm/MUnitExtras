@@ -20,8 +20,11 @@ SetAttributes[mockTest, HoldAllComplete];
 
 
 TestMatch[
-	mockTest["arg1", "arg2", TestID -> "mockTestID"],
-	HoldPattern[mockTest["arg1", "arg2", TestID -> "mockTestID"]],
+	MUnit`Package`$lexicalTestIndex -= 2;
+	mockTest["arg1", "arg2", TestID -> "mockTestID"]
+	,
+	HoldPattern[mockTest["arg1", "arg2", TestID -> "mockTestID"]]
+	,
 	TestID -> "mockTest evaluation: before test syntax protection"
 ];
 
@@ -29,14 +32,19 @@ TestMatch[
 ProtectTestSyntax[mockTest];
 
 
-TestStringMatch[
+Test[
+	MUnit`Package`$lexicalTestIndex--;
 	Block[
-		{MUnit`Package`logTestResult}
+		{
+			MUnit`Package`logTestResult,
+			MUnit`Package`$TestIndex = 0,
+			MUnit`Package`$dynamicTestIndex = 0
+		}
 		,
-		SymbolName[tr = mockTest["arg1", "arg2", TestID -> "mockTestID"]]
+		TestResultQ[tr = mockTest["arg1", "arg2", TestID -> "mockTestID"]]
 	]
 	,
-	"TestResultObject*"
+	True
 	,
 	TestID -> "mockTest evaluation: after test syntax protection"
 ];
@@ -59,14 +67,18 @@ Test[
 ];
 
 
-TestStringMatch[
+Test[
 	Block[
-		{MUnit`Package`logTestResult}
+		{
+			MUnit`Package`logTestResult,
+			MUnit`Package`$TestIndex = 0,
+			MUnit`Package`$dynamicTestIndex = 0
+		}
 		,
-		SymbolName[mockTest[Message[Sin::argx, Sin, 2]]]
+		TestResultQ[mockTest[Message[Sin::argx, Sin, 2]]]
 	]
 	,
-	"TestResultObject*"
+	True
 	,
 	TestID -> "mockTest evaluation with message generating argument: \
 message is not generated"

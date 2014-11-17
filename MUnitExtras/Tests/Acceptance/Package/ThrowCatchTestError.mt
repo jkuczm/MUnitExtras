@@ -28,7 +28,11 @@ mockTest[arg1_, arg2_] :=
 
 TestStringMatch[
 	Block[
-		{MUnit`Package`logTestResult}
+		{
+			MUnit`Package`logTestResult,
+			MUnit`Package`$TestIndex = 0,
+			MUnit`Package`$dynamicTestIndex = 0
+		}
 		,
 		mockTest["arg1", "arg2"]
 	]
@@ -39,14 +43,18 @@ TestStringMatch[
 ];
 
 
-TestStringMatch[
+Test[
 	Block[
-		{MUnit`Package`logTestResult}
+		{
+			MUnit`Package`logTestResult,
+			MUnit`Package`$TestIndex = 0,
+			MUnit`Package`$dynamicTestIndex = 0
+		}
 		,
-		SymbolName[tr = mockTest["arg", "arg"]]
+		TestResultQ[tr = mockTest["arg", "arg"]]
 	]
 	,
-	"TestResultObject*"
+	True
 	,
 	TestID -> "mockTest evaluation: trigger error"
 ];

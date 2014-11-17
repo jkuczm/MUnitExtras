@@ -7,21 +7,7 @@
 Begin["TestEnvironment`Acceptance`TestsOfTests`TestOfTests`"];
 
 
-Needs["MUnitExtras`Package`"];
 Needs["MUnitExtras`TestsOfTests`"];
-
-
-Needs["OptionsUtilities`"]; (* DelegateOptions *)
-
-
-AssignTestFeatures[mockTest];
-
-mockTest[opts:OptionsPattern[]] :=
-	With[
-		{options = DelegateOptions[opts, mockTest, Test]}
-		,
-		Test[False, True, options]
-	]
 
 
 (* ::Section:: *)
@@ -33,7 +19,7 @@ Block[
 	,
 	
 	TestOfTests[
-		tr = mockTest[TestID -> "mockTestID"],
+		tr = Test[False, True, TestID -> "mockTestID"],
 		TestID -> "mockTest evaluation"
 	];
 

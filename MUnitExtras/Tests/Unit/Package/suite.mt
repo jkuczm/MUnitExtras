@@ -1,4 +1,6 @@
 TestSuite[{
+	"MakeString.mt"
+	,
 	"GetTestingFunctions.mt"
 	,
 	"TestQ.mt"

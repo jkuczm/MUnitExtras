@@ -120,7 +120,12 @@ TestCaseSymbolicNumeric[
 		{
 			FilterRules[
 				Flatten[{opts, Options[TestCaseSymbolicNumeric]}],
-				Except[{ApplyToInput, ApplyToExpected, EquivalenceFunction}]
+				Except[{
+					ApplyToInput,
+					ApplyToExpected,
+					MUnit`EquivalenceFunction,
+					SameTest
+				}]
 			]
 		}
 		,
@@ -130,7 +135,7 @@ TestCaseSymbolicNumeric[
 				pos = OptionValue[SubexpressionPosition],
 				applyToInput = OptionValue[ApplyToInput],
 				applyToExpected = OptionValue[ApplyToExpected],
-				equivalenceFunction = OptionValue[EquivalenceFunction],
+				sameTest = OptionValue[SameTestVersioned],
 				extractionResult,
 				extractionMessages,
 				tr
@@ -143,16 +148,15 @@ TestCaseSymbolicNumeric[
 				ThrowTestError @ StringForm[
 					General::argExtractionFailed,
 					pos,
-					MeetLogger`Private`makeString[HoldForm[input]],
-					MeetLogger`Private`makeString /@
-						HoldForm @@@ extractionMessages[[1;;-1,1;;1]]
+					MakeString[HoldForm[input]],
+					MakeString /@ HoldForm @@@ extractionMessages[[1;;-1,1;;1]]
 				]
 			];
 			tr = Test[
 				input, expected, messages,
 				ApplyToInput -> applyToInput,
 				ApplyToExpected -> applyToExpected,
-				EquivalenceFunction -> equivalenceFunction,
+				SameTest -> sameTest,
 				TestFailureMessage -> "Symbolic"
 			];
 

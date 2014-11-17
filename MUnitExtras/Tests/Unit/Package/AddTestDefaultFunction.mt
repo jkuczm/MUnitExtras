@@ -52,7 +52,7 @@ AddTestDefaultFunction evaluation: Null returned, no messages are generated"
 		HoldForm[AssignTestFeatures[mockTest, Test, opts]] /.
 			opts -> optsAssignTestFeatures
 		,
-		EquivalenceFunction -> MemberQ,
+		SameTest -> MemberQ,
 		TestID -> "2 args: \
 AssignTestFeatures function was called with proper arguments"
 	];
@@ -71,7 +71,7 @@ AssignTestFeatures function was called with proper arguments"
 				]
 		]
 		,
-		EquivalenceFunction -> MemberQ,
+		SameTest -> MemberQ,
 		TestID -> "2 args: \
 mockTest has definition calling Test with proper arguments"
 	];
@@ -103,7 +103,7 @@ AddTestDefaultFunction evaluation: Null returned, no messages are generated"
 		HoldForm[AssignTestFeatures[mockTest, mockTestOld, opts]] /.
 			opts -> optsAssignTestFeatures
 		,
-		EquivalenceFunction -> MemberQ,
+		SameTest -> MemberQ,
 		TestID -> "3 args: \
 AssignTestFeatures function was called with proper arguments"
 	];
@@ -125,7 +125,7 @@ AssignTestFeatures function was called with proper arguments"
 				]
 		]
 		,
-		EquivalenceFunction -> MemberQ,
+		SameTest -> MemberQ,
 		TestID -> "3 args: \
 mockTest has definition calling mockTestOld with proper arguments"
 	];

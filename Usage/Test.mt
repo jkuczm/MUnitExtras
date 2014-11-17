@@ -38,7 +38,7 @@ Test[
 	2,
 	TestID -> "Pass: 2. equal to 2, with ApplyToInput",
 	ApplyToInput -> N,
-	EquivalenceFunction -> (TrueQ[Equal[#1, #2]]&)
+	SameTest -> (TrueQ[Equal[#1, #2]]&)
 ];
 
 
